@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Products | Alfa Grocery Mart</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .page-header {
+      background-color: var(--primary-light);
+      padding: 40px 0;
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    
+    .shop-layout {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      gap: 30px;
+    }
+    
+    .sidebar {
+      background: var(--white);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+      height: fit-content;
+      position: sticky;
+      top: 100px;
+    }
+    
+    .filter-group {
+      margin-bottom: 25px;
+    }
+    
+    .filter-title {
+      font-size: 1.1rem;
+      color: var(--text-dark);
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    .search-box {
+      width: 100%;
+      padding: 10px 15px;
+      border: 1px solid var(--border-color);
+      border-radius: 5px;
+      margin-bottom: 15px;
+      outline: none;
+    }
+    .search-box:focus {
+      border-color: var(--primary-color);
+    }
+    
+    .category-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .category-list label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      color: var(--text-light);
+      transition: var(--transition);
+    }
+    
+    .category-list label:hover {
+      color: var(--primary-color);
+    }
+    
+    .category-list input[type="radio"] {
+      accent-color: var(--primary-color);
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 25px;
+    }
+
+    #noResults {
+      text-align: center;
+      padding: 50px 20px;
+      background: var(--white);
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+      display: none;
+      grid-column: 1 / -1;
+    }
+
+    @media (max-width: 768px) {
+      .shop-layout {
+        grid-template-columns: 1fr;
+      }
+      .sidebar {
+        position: static;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Loader -->
+  <div id="loader">
+    <div class="spinner"></div>
+  </div>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="container navbar">
+      <a href="index.html" class="logo">
+        <i class="fas fa-shopping-basket"></i> Alfa Mart
+      </a>
+      
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="products.html" class="active">Products</a>
+        <a href="about.html">About Us</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+
+      <div class="nav-icons">
+        <a href="products.html" class="icon-btn">
+          <i class="fas fa-search"></i>
+        </a>
+        <a href="login.html" class="icon-btn">
+          <i class="fas fa-user"></i>
+        </a>
+        <a href="cart.html" class="icon-btn">
+          <i class="fas fa-shopping-cart"></i>
+          <span class="cart-count" id="cartCount">0</span>
+        </a>
+        <div class="mobile-menu-btn">
+          <i class="fas fa-bars"></i>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="page-header">
+    <div class="container">
+      <h1 style="color: var(--primary-dark); font-size: 2.5rem;">Our Products</h1>
+      <p style="color: var(--text-light); margin-top: 10px;">Freshness in every bite, quality in every aisle.</p>
+    </div>
+  </div>
+
+  <section class="container shop-layout" style="margin-bottom: 80px;">
+    <!-- Sidebar / Filters -->
+    <aside class="sidebar">
+      <div class="filter-group">
+        <h3 class="filter-title">Search</h3>
+        <input type="text" id="searchInput" class="search-box" placeholder="Search products...">
+      </div>
+      
+      <div class="filter-group">
+        <h3 class="filter-title">Categories</h3>
+        <div class="category-list" id="categoryFilters">
+          <label><input type="radio" name="category" value="All" checked> All Products</label>
+          <label><input type="radio" name="category" value="Fruits"> Fruits</label>
+          <label><input type="radio" name="category" value="Vegetables"> Vegetables</label>
+          <label><input type="radio" name="category" value="Dairy"> Dairy & Eggs</label>
+          <label><input type="radio" name="category" value="Snacks"> Snacks</label>
+          <label><input type="radio" name="category" value="Beverages"> Beverages</label>
+          <label><input type="radio" name="category" value="Staples"> Staples</label>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Product Grid -->
+    <main>
+      <div class="products-grid" id="productGrid">
+        <!-- Products injected here -->
+      </div>
+      <div id="noResults">
+        <i class="fas fa-box-open" style="font-size: 3rem; color: #ccc; margin-bottom: 15px;"></i>
+        <h2>No Products Found</h2>
+        <p>Try adjusting your search or filters.</p>
+        <button class="btn" style="margin-top: 20px;" onclick="resetFilters()">Clear Filters</button>
+      </div>
+    </main>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-col">
+          <a href="index.html" class="logo" style="margin-bottom: 20px;">
+            <i class="fas fa-shopping-basket"></i> Alfa Mart
+          </a>
+          <p>Your one-stop destination for fresh groceries, daily essentials, and household items. Quality guaranteed.</p>
+        </div>
+        <div class="footer-col">
+          <h3>Quick Links</h3>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="products.html">Shop Categories</a></li>
+            <li><a href="cart.html">Shopping Cart</a></li>
+            <li><a href="login.html">My Account</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Customer Service</h3>
+          <ul>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Contact Info</h3>
+          <ul>
+            <li><i class="fas fa-envelope" style="color:var(--primary-color); width:20px;"></i> support@alfamart.com</li>
+            <li><i class="fas fa-phone-alt" style="color:var(--primary-color); width:20px;"></i> +1 (234) 567-8900</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; Demo alfa mart website created by AKR.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const productGrid = document.getElementById('productGrid');
+      const searchInput = document.getElementById('searchInput');
+      const categoryRadios = document.querySelectorAll('input[name="category"]');
+      const noResults = document.getElementById('noResults');
+
+      // Check URL for category filter (e.g., from home page)
+      const urlParams = new URLSearchParams(window.location.search);
+      const categoryParam = urlParams.get('category');
+      
+      let currentCategory = 'All';
+      let currentSearch = '';
+
+      if (categoryParam) {
+        const matchingRadio = Array.from(categoryRadios).find(r => r.value === categoryParam);
+        if (matchingRadio) {
+          matchingRadio.checked = true;
+          currentCategory = categoryParam;
+        }
+      }
+
+      function renderProducts() {
+        let filtered = products;
+
+        if (currentCategory !== 'All') {
+          filtered = filtered.filter(p => p.category === currentCategory);
+        }
+
+        if (currentSearch.trim() !== '') {
+          const lowerFilter = currentSearch.toLowerCase();
+          filtered = filtered.filter(p => p.name.toLowerCase().includes(lowerFilter) || p.category.toLowerCase().includes(lowerFilter));
+        }
+
+        if (filtered.length === 0) {
+          productGrid.innerHTML = '';
+          noResults.style.display = 'block';
+        } else {
+          noResults.style.display = 'none';
+          productGrid.innerHTML = filtered.map(p => createProductCard(p)).join('');
+        }
+      }
+
+      searchInput.addEventListener('input', (e) => {
+        currentSearch = e.target.value;
+        renderProducts();
+      });
+
+      categoryRadios.forEach(radio => {
+        radio.addEventListener('change', (e) => {
+          currentCategory = e.target.value;
+          renderProducts();
+        });
+      });
+
+      window.resetFilters = function() {
+        searchInput.value = '';
+        currentSearch = '';
+        currentCategory = 'All';
+        categoryRadios[0].checked = true;
+        renderProducts();
+      };
+
+      // Initial render
+      renderProducts();
+    });
+  </script>
+</body>
+</html>

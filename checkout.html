@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout | Alfa Grocery Mart</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .checkout-container {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 40px;
+      margin: 40px auto 80px;
+    }
+    
+    .checkout-form {
+      background: var(--white);
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: var(--text-dark);
+    }
+    .form-control {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary-color);
+    }
+
+    .order-review {
+      background: var(--primary-light);
+      padding: 30px;
+      border-radius: 10px;
+      height: fit-content;
+    }
+    .review-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      font-size: 0.95rem;
+    }
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      border-top: 2px solid var(--white);
+      margin-top: 15px;
+      padding-top: 15px;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text-dark);
+    }
+
+    .wa-btn {
+      background-color: #25D366; /* WhatsApp Green */
+      width: 100%;
+      margin-top: 20px;
+      font-size: 1.1rem;
+      padding: 15px;
+    }
+    .wa-btn:hover {
+      background-color: #1ebe57;
+    }
+
+    @media (max-width: 768px) {
+      .checkout-container {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Loader -->
+  <div id="loader">
+    <div class="spinner"></div>
+  </div>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="container navbar">
+      <a href="index.html" class="logo">
+        <i class="fas fa-shopping-basket"></i> Alfa Mart
+      </a>
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="products.html">Products</a>
+      </nav>
+      <div class="nav-icons">
+        <a href="cart.html" class="icon-btn">
+          <i class="fas fa-shopping-cart"></i>
+          <span class="cart-count" id="cartCount">0</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <h2 class="section-title" style="margin-top: 40px; text-align: left; margin-bottom: 0;">Checkout</h2>
+  </div>
+
+  <section class="container checkout-container">
+    <div class="checkout-form">
+      <h3 style="margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px;">Delivery Details</h3>
+      <form id="checkoutForm">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="cName" class="form-control" required placeholder="John Doe">
+        </div>
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" id="cPhone" class="form-control" required placeholder="+91 9876543210">
+        </div>
+        <div class="form-group">
+          <label>Complete Address</label>
+          <textarea id="cAddress" class="form-control" rows="3" required placeholder="House No, Street, City, ZIP..."></textarea>
+        </div>
+        <h3 style="margin-top: 30px; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px;">Payment Method</h3>
+        <div class="form-group">
+          <label style="display: flex; align-items: center; gap: 10px; font-weight: normal; margin-bottom: 10px;">
+            <input type="radio" name="payment" value="Cash on Delivery" checked style="accent-color: var(--primary-color);"> Cash on Delivery (COD)
+          </label>
+          <label style="display: flex; align-items: center; gap: 10px; font-weight: normal; margin-bottom: 10px;">
+            <input type="radio" name="payment" value="PhonePe" style="accent-color: var(--primary-color);"> PhonePe (UPI / Wallet)
+          </label>
+          <label style="display: flex; align-items: center; gap: 10px; font-weight: normal; margin-bottom: 10px;">
+            <input type="radio" name="payment" value="Google Pay" style="accent-color: var(--primary-color);"> Google Pay (GPay)
+          </label>
+          <label style="display: flex; align-items: center; gap: 10px; font-weight: normal; margin-bottom: 10px;">
+            <input type="radio" name="payment" value="Paytm" style="accent-color: var(--primary-color);"> Paytm (UPI / Wallet)
+          </label>
+          <label style="display: flex; align-items: center; gap: 10px; font-weight: normal; margin-bottom: 10px;">
+            <input type="radio" name="payment" value="Credit/Debit Card" style="accent-color: var(--primary-color);"> Credit / Debit Card
+          </label>
+          <label style="display: flex; align-items: center; gap: 10px; font-weight: normal;">
+            <input type="radio" name="payment" value="Net Banking" style="accent-color: var(--primary-color);"> Net Banking
+          </label>
+        </div>
+      </form>
+    </div>
+
+    <div class="order-review">
+      <h3 style="margin-bottom: 20px;">Order Summary</h3>
+      <div id="reviewItems"></div>
+
+      <!-- UPI QR Scanner Mockup -->
+      <div id="qrScanner" style="display: none; text-align: center; margin-top: 15px; margin-bottom: 20px; padding: 20px; background: var(--white); border-radius: 10px; box-shadow: var(--shadow);">
+        <p style="font-weight: 600; margin-bottom: 10px; color: var(--text-dark);">Scan to Pay with <span id="upiAppName">UPI</span></p>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/d/d0/QR_code_for_mobile_English_Wikipedia.svg" alt="UPI QR Code" style="width: 150px; height: 150px; border-radius: 10px;">
+        <p style="font-size: 0.85rem; color: var(--text-light); margin-top: 10px;">Amount: <strong id="qrAmount">₹0</strong></p>
+        <p style="font-size: 0.75rem; color: var(--text-light); margin-top: 5px;">(Simulated QR Code. Scan is not actually functional)</p>
+      </div>
+
+      <button type="button" class="btn wa-btn" id="placeOrderBtn">
+        <i class="fab fa-whatsapp" style="margin-right: 10px; font-size: 1.2rem;"></i> Order via WhatsApp
+      </button>
+      <p style="text-align: center; font-size: 0.8rem; color: var(--text-light); margin-top: 15px;">
+        You will be redirected to WhatsApp to confirm your order directly with our mart.
+      </p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <p>&copy; Demo alfa mart website created by AKR.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const reviewItems = document.getElementById('reviewItems');
+      const placeOrderBtn = document.getElementById('placeOrderBtn');
+      const form = document.getElementById('checkoutForm');
+
+      if (cart.length === 0) {
+        window.location.href = 'cart.html';
+        return;
+      }
+
+      let subtotal = 0;
+      let reviewHtml = '';
+
+      cart.forEach(item => {
+        const itemTotal = item.price * item.quantity;
+        subtotal += itemTotal;
+        reviewHtml += `
+          <div class="review-item">
+            <span>${item.quantity}x ${item.name}</span>
+            <span>${formatPrice(itemTotal)}</span>
+          </div>
+        `;
+      });
+
+      const tax = subtotal * 0.05;
+      const total = subtotal + tax;
+
+      reviewHtml += `
+        <div style="border-top: 1px dashed #ccc; margin-top: 15px; padding-top: 15px;">
+          <div class="review-item"><span>Subtotal:</span> <span>${formatPrice(subtotal)}</span></div>
+          <div class="review-item"><span>Tax (5%):</span> <span>${formatPrice(tax)}</span></div>
+          <div class="total-row"><span>Total:</span> <span>${formatPrice(total)}</span></div>
+        </div>
+      `;
+      reviewItems.innerHTML = reviewHtml;
+
+      // QR Scanner Logic
+      const paymentRadios = document.querySelectorAll('input[name="payment"]');
+      const qrScanner = document.getElementById('qrScanner');
+      const upiAppName = document.getElementById('upiAppName');
+      const qrAmount = document.getElementById('qrAmount');
+
+      paymentRadios.forEach(radio => {
+        radio.addEventListener('change', (e) => {
+          const val = e.target.value;
+          if (val === 'PhonePe' || val === 'Google Pay' || val === 'Paytm') {
+            qrScanner.style.display = 'block';
+            upiAppName.textContent = val;
+            qrAmount.textContent = formatPrice(total);
+            placeOrderBtn.innerHTML = '<i class="fab fa-whatsapp" style="margin-right: 10px; font-size: 1.2rem;"></i> Confirm Payment & Order';
+          } else {
+            qrScanner.style.display = 'none';
+            placeOrderBtn.innerHTML = '<i class="fab fa-whatsapp" style="margin-right: 10px; font-size: 1.2rem;"></i> Order via WhatsApp';
+          }
+        });
+      });
+
+      placeOrderBtn.addEventListener('click', () => {
+        if (!form.checkValidity()) {
+          form.reportValidity();
+          return;
+        }
+
+        const name = document.getElementById('cName').value;
+        const phone = document.getElementById('cPhone').value;
+        const address = document.getElementById('cAddress').value;
+        const payment = document.querySelector('input[name="payment"]:checked').value;
+
+        // Save order to mocked "orders" database in local storage for the admin panel
+        const newOrder = {
+          id: 'ORD-' + Math.floor(Math.random() * 90000 + 10000),
+          date: new Date().toLocaleDateString(),
+          customer: name,
+          phone: phone,
+          address: address,
+          payment: payment,
+          total: total,
+          items: cart,
+          status: 'Pending'
+        };
+
+        const orders = JSON.parse(localStorage.getItem('alfaOrders')) || [];
+        orders.push(newOrder);
+        localStorage.setItem('alfaOrders', JSON.stringify(orders));
+
+        // Format Whatsapp Message
+        let waText = `*New Order: ${newOrder.id}*%0A%0A`;
+        waText += `*Name:* ${name}%0A`;
+        waText += `*Phone:* ${phone}%0A`;
+        waText += `*Address:* ${address}%0A`;
+        waText += `*Payment:* ${payment}%0A%0A`;
+        waText += `*Order Items:*%0A`;
+        
+        cart.forEach(item => {
+          waText += `- ${item.quantity}x ${item.name} (${formatPrice(item.price * item.quantity)})%0A`;
+        });
+        
+        waText += `%0A*Total Amount: ${formatPrice(total)}*%0A%0APlease confirm my order.`;
+
+        // Clear cart
+        localStorage.removeItem('alfaCart');
+        cart = [];
+        
+        // WhatsApp Business Number (mock)
+        const waNumber = "919876543210";
+        const waUrl = `https://wa.me/${waNumber}?text=${waText}`;
+
+        // Redirect
+        window.location.href = waUrl;
+      });
+    });
+  </script>
+</body>
+</html>
