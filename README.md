@@ -36,6 +36,6 @@ If you are using an editor like VS Code:
 - `admin.html` - The internal admin dashboard for managing catalog and orders
 - `style.css` - Global styling, theme variables, resets
 - `script.js` - Global variables, local storage synching, DB mockup, and shared utilities
-## Contact
-
+ 
+ ## Contact
 [kumaramma266@gmail.com](mailto:kumaramma266@gmail.com)
