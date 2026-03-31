@@ -38,4 +38,4 @@ If you are using an editor like VS Code:
 - `script.js` - Global variables, local storage synching, DB mockup, and shared utilities
 ## Contact
 
-[kumaramma266@gmail.com](mailto:kumaramma266@gmail;.com.com)
+[kumaramma266@gmail.com](mailto:kumaramma266@gmail.com)
